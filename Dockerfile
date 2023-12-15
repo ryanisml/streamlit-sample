@@ -13,9 +13,9 @@ RUN git clone https://github.com/ryanisml/streamlit-sample.git .
 
 RUN pip install --upgrade pip
 
-# COPY requirements.txt .
+COPY requirements.txt .
 
-RUN pip install -r tmp/requirements.txt
+RUN pip3 install -r requirements.txt
 
 EXPOSE 8501
 
