@@ -9,11 +9,11 @@ RUN apt-get update && apt-get install -y \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-# RUN git clone https://github.com/ryanisml/streamlit-sample.git .
+RUN git clone https://github.com/ryanisml/streamlit-sample.git .
 
 COPY . .
 
-# RUN pip install --upgrade pip
+RUN pip install --upgrade pip
 
 RUN pip3 install -r requirements.txt
 
