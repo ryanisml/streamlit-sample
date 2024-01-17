@@ -1,7 +1,9 @@
 import time
 import streamlit as st
-from st_pages import Page, Section, hide_pages, add_page_title, show_pages
+from st_pages import Page, Section, hide_pages, show_pages
 import extra_streamlit_components as stx
+import requests
+import json
 
 # st.title("Login Page :door:")
 # add_page_title(layout="wide")
@@ -20,26 +22,44 @@ cookie_manager.get_all()
 st.toast('You can refresh all page using R', icon='📢')
 time.sleep(.10)
 
-def checkResponse(username, password):
-    if username == "admin" or password == "admin":
-        cookie_manager.set("user_logged_in", {"id":"19693", "name": "Ryan Ismail", "roles": "admin", "position": "Specialist Application Systems"})
-        return True
-    else:
-        st.error("Username or password is invalid.")
+def checkResponse(email, password):
+    headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+    }
+    data = '{"email": "'+email+'", "password": "'+password+'"}'
+    try:
+        response = requests.post(st.secrets.auth_url, headers=headers, json=json.loads(data))
+        if 'token' in response.json():
+            cookie_manager.set("user_logged_in", response.json())
+            return True
+        else:
+            st.error(response.json()["message"])
+            return False
+        return False
+    except requests.exceptions.RequestException as e:
+        st.exception(e)
         return False
     pass
+    # if username == "admin" or password == "admin":
+    #     cookie_manager.set("user_logged_in", {"id":"19693", "name": "Ryan Ismail", "roles": "admin", "position": "Specialist Application Systems"})
+    #     return True
+    # else:
+    #     st.error("Username or password is invalid.")
+    #     return False
+    # pass
         
 def checkPassword():
-    def validateData(username, password):
-        if username == "" or password == "":
-            st.error("Please fill username and password first.")
+    def validateData(email, password):
+        if email == "" or password == "":
+            st.error("Please fill email and password first.")
             return False
-        checkResponse(username, password)
+        checkResponse(email, password)
     if cookie_manager.get(cookie="user_logged_in") != None:
         return True
-    username = st.text_input("Username")
+    email = st.text_input("email")
     password = st.text_input("Password", type="password", key="password")
-    st.button("Login", on_click=validateData, args=(username, password))
+    st.button("Login", on_click=validateData, args=(email, password))
     return False
 
 if not checkPassword():

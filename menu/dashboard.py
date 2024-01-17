@@ -5,7 +5,6 @@ from streamlit_ace import st_ace
 from streamlit_calendar import calendar
 import os
 from pathlib import Path
-import datetime
 
 add_page_title(layout="wide")
 st.subheader("OCR Scanner")

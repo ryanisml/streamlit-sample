@@ -15,7 +15,3 @@ if user_logged_in is not None:
     st.write("Hello, " + user_logged_in["id"] + " - " + user_logged_in["name"] + "!")
     st.write("Your position is " + user_logged_in["position"] + "!")
     st.warning("Do you really, wanna logout from this apps?")
-    if st.button("Logout"):
-        cookie_manager.delete("user_logged_in")
-        show_pages([Page("main.py", "Login Page", ":door:")])
-        st.stop()   

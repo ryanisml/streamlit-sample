@@ -2,27 +2,39 @@ import streamlit as st
 from st_pages import add_page_title
 import requests
 import pandas as pd
+import extra_streamlit_components as stx
+
+def get_manager():
+    return stx.CookieManager()
+
+cookie_manager = get_manager()
+cookie_manager.get_all()
+user_logged_in = cookie_manager.get(cookie="user_logged_in")
 
 def callPage(page = None):
-    headers = {
-        'Accept': 'application/json'
-    }
-    try:
-
-        response_API = requests.get(page, headers=headers)
-        data = response_API.json()
-        return data
-    except requests.exceptions.RequestException as e:
-        st.exception(e)
+    if user_logged_in != None:
+        headers = {
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ' + user_logged_in["token"]
+        }
+        try:
+            response_API = requests.get(page, headers=headers)
+            if response_API.status_code != 200:
+                st.error(response_API.status_code + ' - ' + response_API.json()["message"])
+                return False
+            else:
+                data = response_API.json()
+                return data
+        except requests.exceptions.RequestException as e:
+            st.exception(e)
+            return False
+    else:
         return False
-
-st.set_page_config(page_title="Logs", layout="wide")
 
 add_page_title(layout="wide")
 
 st.subheader("Api Product Data")
 
-# st.write("This is just a sample page!")
 url = st.secrets["sample_url"]
 data = callPage(url)
 if data != False:
