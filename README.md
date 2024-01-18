@@ -15,10 +15,12 @@ Before using this application make sure to:
 - Setting new configuration at `secrets.toml` file like :
 
 ## Running
+#### Run With Python
 To run this project with cmd just type
 ```
 streamlit run streamlit_main.py
 ```
+#### Run With Docker
 or you can use docker to build 
 ```
 docker build -t streamlit-sample .
