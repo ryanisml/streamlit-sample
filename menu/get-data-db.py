@@ -5,6 +5,7 @@ import pandas as pd
 from _mylibs import *
 import sqlalchemy as sal
 from sqlalchemy import text
+import dateutil.relativedelta
 
 add_page_title(layout="wide")
 
@@ -15,7 +16,7 @@ connection_url = sal.create_engine(connection_string)
 conn = connection_url.connect()
 
 def generateChart(series, start_date, end_date):
-    query_chart1 = text("SELECT category, SUM(" + series + ") as "+series+" FROM products where created_at >= '" + start_date.strftime("%Y-%m-%d") + "' and created_at <= '" + end_date.strftime("%Y-%m-%d") + "' GROUP BY category")
+    query_chart1 = text("SELECT category, SUM(" + series + ") as "+series+" FROM "+ st.secrets["table_name"] +" where created_at >= '" + start_date.strftime("%Y-%m-%d") + "' and created_at <= '" + end_date.strftime("%Y-%m-%d") + "' GROUP BY category")
     data_chart1 = pd.read_sql_query(query_chart1, conn)
     if(data_chart1.empty == False):
         chart1 = pd.DataFrame(data_chart1)
@@ -25,7 +26,7 @@ def generateChart(series, start_date, end_date):
 @st.cache_data(ttl=300)
 def filterData(category, series, start_date, end_date):
     # Add your filtering logic here
-    query = "SELECT * FROM products where created_at >= '" + start_date.strftime("%Y-%m-%d") + "' and created_at <= '" + end_date.strftime("%Y-%m-%d") + "'"
+    query = "SELECT * FROM "+ st.secrets["table_name"] +" where created_at >= '" + start_date.strftime("%Y-%m-%d") + "' and created_at <= '" + end_date.strftime("%Y-%m-%d") + "'"
     if(category != 'ALL'):
         query += " and category = '" + category + "'"
     data = pd.read_sql_query(text(query), conn)
@@ -43,23 +44,22 @@ def runQuery(query):
     data = pd.read_sql_query(sqlText, conn)
     return data
 
-category = runQuery("SELECT DISTINCT category FROM products")
+category = runQuery("SELECT DISTINCT category FROM "+ st.secrets["table_name"] +"")
 new_category = loopFetchData(category['category'])
 series = ["STOCK", "PRICE"]
 with st.expander("Filter Data", expanded=True):
     value_category = st.selectbox("Category", new_category)
     value_series = st.selectbox("Series", series)
-    timeday = datetime.datetime.now()
-    temp_prev_month = timeday.month - 1
-    # next_year = today.year + 1
-    first_day = datetime.date(timeday.year, 1, 1)
+    datetimenow = datetime.datetime.now()
+    previousdtmonth = datetimenow + dateutil.relativedelta.relativedelta(months=-1)
+    first_day = datetime.date(datetimenow.year, 1, 1)
 
-    today = datetime.date(timeday.year, timeday.month, timeday.day)
-    previouse_month = datetime.date(timeday.year, temp_prev_month, timeday.day)
+    today = datetime.date(datetimenow.year, datetimenow.month, datetimenow.day)
+    previous_month = datetime.date(previousdtmonth.year, previousdtmonth.month, previousdtmonth.day)
     d = st.date_input(
         "Select date range",
-        (previouse_month, today),
-        first_day,
+        (previous_month, today),
+        previous_month,
         today,
         format="YYYY/MM/DD",
     )
