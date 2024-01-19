@@ -41,13 +41,6 @@ def checkResponse(email, password):
         st.exception(e)
         return False
     pass
-    # if username == "admin" or password == "admin":
-    #     cookie_manager.set("user_logged_in", {"id":"19693", "name": "Ryan Ismail", "roles": "admin", "position": "Specialist Application Systems"})
-    #     return True
-    # else:
-    #     st.error("Username or password is invalid.")
-    #     return False
-    # pass
         
 def checkPassword():
     def validateData(email, password):
@@ -63,9 +56,6 @@ def checkPassword():
     return False
 
 if not checkPassword():
-    # show_pages([Page("main.py", "Login Page", ":door:")])
-    # hide_pages(["Dashboard", "Loader", "Hauler", "Log Data", "Location", "Logout"])
-    # st.markdown("""<style>[data-testid="stSidebar"] {display: none} [data-testid="collapsedControl"] { display: none }</style>""", unsafe_allow_html=True)
     st.stop()
 
 if cookie_manager.get(cookie="user_logged_in") != None:
