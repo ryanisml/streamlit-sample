@@ -23,11 +23,11 @@ streamlit run streamlit_main.py
 #### Run With Docker
 or you can use docker to build 
 ```
-docker build -t streamlit-sample .
+docker build -t streamlit-sample:1.0 .
 ```
 and run with
 ```
-docker run -p 8501:8501 streamlit-sample
+docker run -p 8501:8501 -d -name streamlit-sample streamlit-sample:1.0
 ```
 
 ## Authentication
