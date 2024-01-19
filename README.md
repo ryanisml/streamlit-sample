@@ -27,7 +27,7 @@ docker build -t streamlit-sample:1.0 .
 ```
 and run with
 ```
-docker run -p 8501:8501 -d -name streamlit-sample streamlit-sample:1.0
+docker run -p 8501:8501 -d --name streamlit-sample streamlit-sample:1.0
 ```
 
 ## Authentication
