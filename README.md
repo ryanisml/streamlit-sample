@@ -12,7 +12,7 @@ Before using this application make sure to:
 ```
 - After install requirements, configure file `secrets.toml` at `.streamlit` folder. `[If Needed]`
 - If you don't have `.streamlit` folder. Create new folder first at root folder.
-- Update configuration for all at `secrets.toml` to your new configuration if you want to test it for yourself. 
+- Update configuration for all at `secrets.toml` to your new configuration if you want to test at your own. 
 
 ## Running
 #### Run With Python
