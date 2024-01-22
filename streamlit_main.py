@@ -12,9 +12,9 @@ import json
 def get_manager():
     return stx.CookieManager()
 
-st.set_page_config(page_title="Login Page", layout="wide", page_icon=":door:", menu_items=None)
+st.set_page_config(page_title="Login Page", page_icon="logo.png", layout="wide", menu_items=None)
 
-st.title("Login Page :door:")
+st.title("Login Page - STREAMLIT :door:")
 st.divider()
 cookie_manager = get_manager()
 cookie_manager.get_all()
